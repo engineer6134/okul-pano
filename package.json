@@ -1,0 +1,9 @@
+{
+  "name": "okul-pano",
+  "version": "1.0.0",
+  "description": "Okul intranet TV'si için yönetilebilir duyuru panosu",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

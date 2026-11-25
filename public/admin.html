@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Okul Pano Yönetimi</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#e5e7eb;--text:#111827;--mut:#6b7280;--pri:#4f86f7;--pri-d:#3b6fe0;--danger:#dc2626;--ok:#16a34a}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+header{height:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:5}
+header h1{font-size:18px;margin:0;display:flex;align-items:center;gap:10px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}
+.layout{display:flex;max-width:1200px;margin:0 auto;gap:24px;padding:20px 24px}
+nav{width:200px;flex:none}
+nav .grp{font-size:11px;font-weight:700;color:#374151;margin:18px 10px 6px;letter-spacing:.04em}
+nav .grp:first-child{margin-top:4px}
+nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:#4b5563;font-weight:600;cursor:pointer;text-decoration:none;font-size:13px}
+nav a:hover{background:#e9ecf1}
+nav a.on{background:var(--pri);color:#fff}
+nav a i{font-style:normal;width:16px;text-align:center}
+main{flex:1;max-width:790px;min-width:0}
+main h2{margin:4px 0 2px;font-size:22px}
+main .sub{color:var(--mut);font-size:13px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.card h3{margin:0 0 14px;font-size:14px}
+label{display:block;font-size:12px;font-weight:600;color:#374151;margin:10px 0 4px}
+input[type=text],input[type=number],input[type=time],input[type=url],input[type=password],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}
+textarea{min-height:64px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid #bfd3ff;border-color:var(--pri)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.row>*{flex:1;min-width:120px}
+.row>.auto{flex:none;min-width:0}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:9px;padding:9px 18px;font-weight:700;cursor:pointer;font:inherit;font-weight:700}
+.btn:hover{background:var(--pri-d)}
+.btn.sec{background:#eef0f4;color:#374151}.btn.sec:hover{background:#e2e5ea}
+.btn.del{background:#fee2e2;color:var(--danger);padding:6px 12px}
+.count{font-size:11px;color:var(--mut);text-align:right;margin-top:4px}
+.item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;margin-bottom:8px;background:#fff}
+.item .t{flex:1;word-break:break-word}
+.item small{color:var(--mut);display:block}
+.item img{width:84px;height:52px;object-fit:cover;border-radius:7px;background:#eee}
+.empty{text-align:center;color:var(--mut);padding:24px}
+.sw{position:relative;width:40px;height:22px;flex:none;display:inline-block}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;background:#cbd5e1;border-radius:22px;cursor:pointer;transition:.2s}
+.sw span:before{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked+span{background:var(--pri)}
+.sw input:checked+span:before{transform:translateX(18px)}
+.tg{display:flex;align-items:center;gap:8px;font-weight:600;font-size:12px;flex:none;min-width:0}
+.toast{position:fixed;bottom:20px;right:20px;background:#111827;color:#fff;padding:11px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.toast.err{background:var(--danger)}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.stat div{background:#f8fafc;border:1px solid var(--line);border-radius:11px;padding:14px}
+.stat b{display:block;font-size:18px;margin-top:4px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+#login{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:100}
+#login .card{width:340px}
+.mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:800px){.layout{flex-direction:column}nav{width:100%;display:flex;flex-wrap:wrap;gap:4px}nav .grp{display:none}.mod-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="login"><div class="card"><h3>Yönetici Girişi</h3><label>Şifre</label><input type="password" id="pw" autofocus><div style="margin-top:14px"><button class="btn" style="width:100%" onclick="login()">Giriş</button></div><div id="lerr" style="color:var(--danger);margin-top:8px;font-size:12px"></div><div style="margin-top:14px;text-align:center;font-size:11px;color:var(--mut)">Kodlayan Ali AKDOĞAN</div></div></div>
+
+<header>
+  <h1><span class="logo">O</span> Okul Pano Yönetimi</h1>
+  <a class="btn" href="/" target="_blank" style="text-decoration:none">🖥 Panoyu Görüntüle</a>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<footer style="text-align:center;padding:6px 0 22px;color:var(--mut);font-size:12px">Kodlayan <b>Ali AKDOĞAN</b></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const MENU=[
+ ['PANO GÖRÜNÜMÜ',[['general','⚙','Genel ve Görünüm']]],
+ ['İÇERİK YÖNETİMİ',[['ann','📢','Duyurular'],['slides','🖼','Slayt Alanı'],['news','📰','Okul Haberleri'],['yt','▶','YouTube Widget\'ı'],['mods','🧩','Özel Modüller'],['spec','🎉','Özel Gün Sayfaları']]],
+ ['OKUL BİLGİLERİ',[['teachers','🧑‍🏫','Öğretmenler'],['duty','👥','Nöbet Programı'],['bd','🎂','Doğum Günleri'],['sched','🕒','Ders Saatleri']]],
+ ['SİSTEM',[['health','📈','Pano Sağlığı'],['pass','🔑','Şifre Değiştir'],['backup','💾','Yedekleme'],['about','ℹ','Hakkında']]]
+];
+const TITLES={pass:['Yönetici Şifresi','Yönetim paneli giriş şifresini değiştirin'],teachers:['Öğretmenler','Öğretmen listesi; panoda soyadı baş harfiyle görünür'],news:['Okul Haberleri','Okul sitesindeki haberler slayt alanında otomatik döner'],general:['Genel ve Görünüm','Panonun genel ayarlarını yapın'],ann:['Duyurular','Panoda gösterilecek duyuruları yönetin'],slides:['Slayt Alanı','Panoda dönen görselleri yönetin'],yt:['YouTube Widget\'ı','Panoda oynatılacak YouTube videosu'],spec:['Özel Gün Sayfaları','Öğretmenler Günü, 23 Nisan gibi özel günlerde tam ekran gösterilecek HTML sayfaları'],mods:['Özel Modüller','Kendi HTML kutularınızı panoya ekleyin'],duty:['Nöbet Programı','Aylık nöbet çizelgeleri: Excel\'den yükleyin veya elle düzenleyin'],bd:['Doğum Günleri','Bugün doğum günü olanlar panoda görünür'],sched:['Ders Saatleri','Her gün için ders ve teneffüs saatleri (zil sayacı bunu kullanır)'],health:['Pano Sağlığı','Sunucu ve pano bağlantı durumu'],backup:['Yedekleme','Ayarları yedekleyin veya geri yükleyin'],about:['Hakkında','']};
+let S={},cur='ann',KEY=sessionStorage.getItem('k')||'';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const shortName=n=>{const p=String(n||'').trim().split(/\s+/).filter(Boolean);if(p.length<2)return p[0]||'';const last=p.pop();return (p.join(' ')+' '+last.charAt(0)+'.').toLocaleUpperCase('tr')};
+const DAYS=['','Pazartesi','Salı','Çarşamba','Perşembe','Cuma'];
+let schDay=1,tq='';
+const addMin=(t,m)=>{const x=(+t.slice(0,2))*60+(+t.slice(3))+m;return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0')};
+function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast show'+(err?' err':'');clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',2200)}
+
+async function api(method,url,body,raw){
+  const h={'x-admin-key':encodeURIComponent(KEY)};
+  if(body&&!raw)h['Content-Type']='application/json';
+  const r=await fetch(url,{method,headers:{...h,...(raw||{})},body:raw?body:body?JSON.stringify(body):undefined});
+  if(r.status===401){$('#login').style.display='grid';throw new Error('Yetkisiz')}
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||'Hata');
+  return j;
+}
+const cleanDuty=()=>({...S.duty,schedules:S.duty.schedules.filter(x=>!x._draft).map(({_note,_draft,...r})=>r)});
+async function save(sec){try{await api('PUT','/api/state/'+sec,sec==='duty'?cleanDuty():S[sec]);toast('Kaydedildi')}catch(e){toast(e.message,1)}}
+async function login(){
+  const pw=$('#pw').value;
+  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+  if(r.ok){KEY=pw;sessionStorage.setItem('k',pw);$('#login').style.display='none';init()}else $('#lerr').textContent='Şifre hatalı';
+}
+$('#pw').addEventListener('keydown',e=>e.key==='Enter'&&login());
+
+function buildNav(){
+  $('#nav').innerHTML=MENU.map(([g,items])=>`<div class="grp">${g}</div>`+items.map(([k,i,n])=>`<a data-k="${k}" class="${k===cur?'on':''}"><i>${i}</i>${n}</a>`).join('')).join('');
+  document.querySelectorAll('#nav a').forEach(a=>a.onclick=()=>{cur=a.dataset.k;buildNav();render()});
+}
+const sw=(id,on)=>`<label class="sw"><input type="checkbox" id="${id}" ${on?'checked':''}><span></span></label>`;
+const header=()=>`<h2>${TITLES[cur][0]}</h2><div class="sub">${TITLES[cur][1]}</div>`;
+
+const R={
+general(){const s=S.settings;return `<div class="card"><h3>Logolar</h3>
+ <div class="row" style="align-items:stretch">${logoBox('logoLeft','Sol logo (okul logosu)',s.logoLeft)}${logoBox('logoRight','Sağ logo (MEB vb.)',s.logoRight)}</div>
+ <div style="font-size:12px;color:var(--mut);margin-top:10px">Logolar panoda başlığın iki yanında beyaz kutuda görünür; ortada okul adı yer alır. Yüklenmezse o alan boş kalır. PNG, JPG, WEBP, GIF veya SVG (en fazla 5 MB).</div></div>
+ <div class="card"><h3>Pano Ayarları</h3>
+ <label>Okul Adı</label><input type="text" id="g_name" value="${esc(s.schoolName)}" placeholder="Örn. Atatürk Ortaokulu">
+ <div class="row"><div><label>Tema</label><select id="g_theme">${[['blue','Mavi'],['green','Yeşil'],['red','Kırmızı'],['dark','Koyu']].map(([v,n])=>`<option value="${v}" ${s.theme===v?'selected':''}>${n}</option>`).join('')}</select></div>
+ <div><label>Yerleşim</label><select id="g_layout"><option value="split" ${s.layout==='split'?'selected':''}>Slayt + Yan Panel</option><option value="full" ${s.layout==='full'?'selected':''}>Tam Ekran Slayt</option></select></div>
+ <div><label>Yan panel genişliği</label><select id="g_side">${[['','Otomatik (ekrana göre)'],['20','Çok dar (%20)'],['24','Dar (%24)'],['28','Normal (%28)'],['33','Geniş (%33)'],['38','Çok geniş (%38)']].map(([v,n])=>`<option value="${v}" ${String(s.sideWidth||'')===v?'selected':''}>${n}</option>`).join('')}</select></div></div>
+ <div class="row"><div><label>Görsel / video yerleşimi</label><select id="g_fit"><option value="cover" ${s.imageFit!=='contain'?'selected':''}>Alanı tamamen kapla (kenarlardan kırpılabilir)</option><option value="contain" ${s.imageFit==='contain'?'selected':''}>Tamamını göster (kenarlarda boşluk kalabilir)</option></select></div></div>
+ <div class="row"><div><label>Slayt Süresi (sn)</label><input type="number" id="g_sec" min="3" max="120" value="${s.slideSeconds}"></div>
+ <div><label>Kayan Yazı Hızı (px/sn)</label><input type="number" id="g_tick" min="20" max="300" value="${s.tickerSpeed}"></div></div>
+ <div class="row" style="margin-top:14px"><span class="tg">${sw('g_clock',s.showClock)} Saati göster</span><span class="tg">${sw('g_wx',s.showWeather)} Hava durumunu göster</span></div>
+ <label>Hava durumu şehri</label>
+ <div class="row"><input type="text" id="g_city" value="${esc(s.weatherCity||'')}" placeholder="Örn. Ankara"><button class="btn sec auto" onclick="findCity()">Şehri Bul</button></div>
+ <div id="g_cityinfo" style="font-size:12px;color:var(--mut);margin-top:4px">${s.weatherLat!=null?`Seçili: ${esc(s.weatherLabel||s.weatherCity)} (${(+s.weatherLat).toFixed(2)}, ${(+s.weatherLon).toFixed(2)})`:'Şehir seçilmedi'}</div>
+ <div style="margin-top:16px;text-align:right"><button class="btn" onclick="saveGeneral()">Kaydet</button></div></div>`},
+ann(){return `<div class="card"><h3>Yeni Duyuru</h3>
+ <textarea id="a_text" maxlength="140" placeholder="Duyuru yazısı (Max 140 karakter)" oninput="$('#a_cnt').textContent=this.value.length+'/140'"></textarea>
+ <div class="count" id="a_cnt">0/140</div>
+ <div class="row" style="margin-top:8px"><span class="tg auto">${sw('a_act',true)} Aktif</span><div class="auto" style="display:flex;align-items:center;gap:8px"><label style="margin:0">Bitiş tarihi (isteğe bağlı)</label><input type="date" id="a_until" style="width:auto;padding:7px;border:1px solid var(--line);border-radius:9px"></div><span></span><button class="btn auto" onclick="addAnn()">💾 Ekle</button></div></div>
+ ${S.announcements.length?S.announcements.map((a,i)=>`<div class="item"><span class="tg">${sw('',a.active).replace('<input','<input onchange="togAnn('+i+',this.checked)"')}</span><div class="t">${esc(a.text)}${a.until?`<small style="${a.until<today()?'color:var(--danger)':''}">${a.until<today()?'Süresi doldu: ':'Bitiş: '}${a.until.split('-').reverse().join('.')}</small>`:''}</div><button class="btn del" onclick="delItem('announcements',${i})">Sil</button></div>`).join(''):'<div class="empty">Henüz duyuru eklenmedi</div>'}`},
+slides(){return `<div class="card"><h3>Yeni Slayt</h3>
+ <label>Görsel (PNG, JPG, GIF, WEBP, MP4)</label><input type="file" id="s_file" accept="image/*,video/mp4">
+ <label>Alt yazı (isteğe bağlı)</label><input type="text" id="s_cap" maxlength="100">
+ <div style="margin-top:12px;text-align:right"><button class="btn" onclick="addSlide()">Yükle ve Ekle</button></div></div>
+ ${S.slides.length?S.slides.map((s,i)=>`<div class="item">${s.url.endsWith('.mp4')?'<span style="font-size:28px">🎬</span>':`<img src="${esc(s.url)}">`}<div class="t">${esc(s.caption||'(alt yazı yok)')}<small>${esc(s.url)}</small></div>
+ <button class="btn sec" onclick="mv('slides',${i},-1)">↑</button><button class="btn sec" onclick="mv('slides',${i},1)">↓</button>
+ <span class="tg">${sw('',s.active).replace('<input','<input onchange="togItem(\'slides\','+i+',this.checked)"')}</span><button class="btn del" onclick="delSlide(${i})">Sil</button></div>`).join(''):'<div class="empty">Henüz slayt eklenmedi</div>'}`},
+yt(){const y=S.youtube;return `<div class="card"><h3>YouTube Videosu</h3>
+ <label>Video bağlantısı</label><input type="url" id="y_url" value="${esc(y.url)}" placeholder="https://www.youtube.com/watch?v=...">
+ <div class="row" style="margin-top:12px"><span class="tg">${sw('y_act',y.active)} Panoda göster</span><span class="tg">${sw('y_mute',y.muted)} Sessiz</span></div>
+ <div style="margin-top:10px;font-size:12px;color:var(--mut)">Etkinse, slayt alanının yerine video oynatılır. Not: TV'nin internet erişimi gerekir.</div>
+ <div style="margin-top:14px;text-align:right"><button class="btn" onclick="saveYt()">Kaydet</button></div></div>`},
+mods(){return `<div class="card"><h3>Yeni Modül</h3>
+ <label>Başlık</label><input type="text" id="m_t" maxlength="40">
+ <label>İçerik (HTML veya düz metin)</label><textarea id="m_h" style="min-height:100px" placeholder="&lt;b&gt;Yemek listesi&lt;/b&gt;&lt;br&gt;Mercimek çorbası..."></textarea>
+ <div class="row" style="margin-top:8px"><span class="tg auto">${sw('m_act',true)} Aktif</span><span></span><button class="btn auto" onclick="addMod()">Ekle</button></div></div>
+ ${S.modules.length?S.modules.map((m,i)=>`<div class="item"><span class="tg">${sw('',m.active).replace('<input','<input onchange="togItem(\'modules\','+i+',this.checked)"')}</span><div class="t"><b>${esc(m.title)}</b><small>${esc(m.html.replace(/<[^>]+>/g,' ').slice(0,90))}</small></div><button class="btn del" onclick="delItem('modules',${i})">Sil</button></div>`).join(''):'<div class="empty">Henüz modül yok</div>'}`},
+spec(){
+ const L=S.specials||[],td=today(),nowM=(()=>{const d=new Date();return d.getHours()*60+d.getMinutes()})();
+ const tm=t=>{const[x,y]=t.split(':').map(Number);return x*60+y};
+ const stat=x=>{if(!x.active)return['Pasif','#94a3b8'];if(x.pinned)return['Şu an panoda (elle açık)','#16a34a'];if(!x.from&&!x.to)return['Tarih girilmedi','#d97706'];
+  if(x.from&&td<x.from)return['Zamanı bekliyor','#2563eb'];if(x.to&&td>x.to)return['Süresi doldu','#dc2626'];
+  if((x.timeFrom&&nowM<tm(x.timeFrom))||(x.timeTo&&nowM>=tm(x.timeTo)))return['Bugün, saat aralığını bekliyor','#2563eb'];return['Şu an panoda','#16a34a']};
+ const opt=(i,f,l,v)=>`<span class="tg">${sw('',v).replace('<input','<input onchange="updSpec('+i+',\''+f+'\',this.checked)"')} ${l}</span>`;
+ return `<div class="card"><h3>Yeni Özel Gün Sayfası</h3>
+ <label>Başlık</label><input type="text" id="sp_t" maxlength="60" placeholder="Öğretmenler Günü">
+ <label>HTML dosyası</label><input type="file" id="sp_f" accept=".html,.htm,text/html">
+ <label>Fotoğraf (isteğe bağlı; sayfadaki ilk görselin yerine geçer)</label><input type="file" id="sp_i" accept="image/png,image/jpeg,image/webp,image/gif">
+ <div class="row" style="margin-top:10px"><div><label>Başlangıç tarihi</label><input type="date" id="sp_from" value="${td}"></div><div><label>Bitiş tarihi</label><input type="date" id="sp_to" value="${td}"></div>
+ <div><label>Saat (başlangıç, isteğe bağlı)</label><input type="time" id="sp_tf"></div><div><label>Saat (bitiş, isteğe bağlı)</label><input type="time" id="sp_tt"></div></div>
+ <div class="row" style="margin-top:12px"><span class="tg">${sw('sp_hide',true)} Kontrol düğmelerini gizle</span><span class="tg">${sw('sp_auto',true)} Otomatik başlat ve tekrarla</span><span class="tg">${sw('sp_names',true)} Öğretmen adlarını listeden al</span></div>
+ <div style="font-size:12px;color:var(--mut);margin-top:10px;line-height:1.5">Sayfa, belirtilen tarih ve saatte panoda tam ekran açılır; süre bitince pano kendiliğinden normale döner. Sayfa yalıtılmış (sandbox) çalışır; yerel görseller sayfa içine gömülü olmalı, internetten gelen görseller için TV'nin internet erişimi gerekir. "Öğretmen adlarını listeden al" yalnızca sayfada <code>names</code> adlı bir liste varsa çalışır.</div>
+ <div style="margin-top:14px;text-align:right"><button class="btn" onclick="addSpec()">Yükle ve Ekle</button></div></div>
+ ${L.length?L.map((x,i)=>{const[st,c]=stat(x);return `<div class="card"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:16px;flex:1">${esc(x.title)}</b><span style="font-size:12px;font-weight:700;color:${c}">● ${st}</span></div>
+ <div class="row" style="margin-top:10px"><div><label>Başlangıç</label><input type="date" value="${esc(x.from||'')}" onchange="updSpec(${i},'from',this.value)"></div><div><label>Bitiş</label><input type="date" value="${esc(x.to||'')}" onchange="updSpec(${i},'to',this.value)"></div>
+ <div><label>Saat başı</label><input type="time" value="${esc(x.timeFrom||'')}" onchange="updSpec(${i},'timeFrom',this.value)"></div><div><label>Saat sonu</label><input type="time" value="${esc(x.timeTo||'')}" onchange="updSpec(${i},'timeTo',this.value)"></div></div>
+ <div class="row" style="margin-top:10px">${opt(i,'active','Aktif',x.active)}${opt(i,'pinned','Şimdi göster (tarihe bakmadan)',x.pinned)}${opt(i,'hideControls','Düğmeleri gizle',x.hideControls!==false)}${opt(i,'autoStart','Otomatik başlat',x.autoStart!==false)}${opt(i,'useTeachers','Adları listeden al',x.useTeachers!==false)}</div>
+ <div class="row" style="margin-top:12px;justify-content:flex-end"><a class="btn sec auto" style="text-decoration:none" target="_blank" href="/?special=${esc(x.id)}">Önizle</a><button class="btn del auto" onclick="delSpec(${i})">Sil</button></div></div>`}).join(''):'<div class="empty">Henüz özel gün sayfası eklenmedi</div>'}`},
+teachers(){return `<div class="card"><h3>Öğretmen Ekle</h3>
+ <div class="row"><input type="text" id="t_name" placeholder="Ad Soyad (örn. Ayşe Yılmaz)" onkeydown="if(event.key==='Enter')addTeacher()"><button class="btn auto" onclick="addTeacher()">Ekle</button></div>
+ <div style="font-size:12px;color:var(--mut);margin-top:8px">Son sözcük soyadı sayılır. Örnek: panoda <b>${esc(shortName('Ayşe Yılmaz'))}</b> görünür. Listedeki "Görev" seçiminden müdür ve müdür yardımcılarını belirleyin; özel gün sayfalarında bu kişiler başta ve unvanlarıyla gösterilir.</div></div>
+ <div class="card"><h3>Toplu Ekle</h3><textarea id="t_bulk" style="min-height:90px" placeholder="Her satıra bir ad soyad"></textarea><div style="margin-top:10px;text-align:right"><button class="btn sec" onclick="bulkTeachers()">Satırları Ekle</button></div></div>
+ <div class="card"><h3>Öğretmenler (<span id="t_cnt">${S.teachers.length}</span>)</h3>
+ <input type="text" id="t_q" value="${esc(tq)}" placeholder="Ara…" oninput="tq=this.value;drawTeachers()" style="margin-bottom:10px">
+ <div id="t_list">${tListHtml()}</div></div>`},
+duty(){
+ const D=S.duty,c=dCur(),act=dActive();
+ const list=[...D.schedules].sort((a,b)=>(b.validFrom||'').localeCompare(a.validFrom||''));
+ return `<div class="card"><h3>Aylık Nöbet Çizelgeleri</h3>
+ ${act?'':'<div style="color:var(--danger);font-size:13px;margin-bottom:10px">⚠ Bugün için geçerli bir çizelge yok; panoda nöbet kartı görünmez.</div>'}
+ ${list.map(x=>`<div class="item" style="${c&&x.id===c.id?'border-color:var(--pri);background:#f3f7ff':''}"><div class="t"><b>${esc(x.name||'Çizelge')}</b><small>${fmtD(x.validFrom)} – ${fmtD(x.validTo)}${act&&act.id===x.id?' · <b style="color:var(--ok)">Şu an geçerli</b>':''}${x._draft?' · <b style="color:#b45309">kaydedilmedi</b>':''}</small></div><button class="btn sec" onclick="dPick('${x.id}')">Düzenle</button><button class="btn sec" onclick="dAdd('${x.id}',true)">Kopyala</button><button class="btn del" onclick="dDel('${x.id}')">Sil</button></div>`).join('')||'<div class="empty">Henüz çizelge yok</div>'}
+ <div class="row" style="margin-top:10px"><button class="btn auto" onclick="dAdd('',false)">+ Yeni boş çizelge</button></div></div>
+ <div class="card"><h3>Excel'den Yükle</h3>
+ <input type="file" id="du_file" accept=".xlsx,.xls,.csv" onchange="dImport(this)">
+ <div class="row" style="margin-top:10px"><button class="btn sec auto" onclick="dTemplate()">Örnek Excel şablonunu indir</button></div>
+ <div style="font-size:12px;color:var(--mut);margin-top:8px;line-height:1.5">İlk satırda Pazartesi…Cuma başlıkları, ilk sütunda nöbet yerleri, aralarında öğretmen adları olan tabloyu okur. Tablonun altına <b>"NÖBETLER 02.11.2026-27.11.2026 TARİHLERİ ARASINDA GEÇERLİDİR."</b> ve <b>"NÖBETÇİ MÜDÜR YARDIMCISI: Ad Soyad"</b> satırlarını eklerseniz tarihler ve müdür yardımcısı da otomatik alınır. Yüklenen çizelge önce aşağıda gösterilir; kontrol edip <b>Kaydet</b>'e basın.</div><div id="du_msg"></div></div>
+ ${c?dEditor(c):''}`},
+bd(){const sorted=S.birthdays.map((b,i)=>({...b,i})).sort((a,b)=>a.date.slice(5).localeCompare(b.date.slice(5)));return `<div class="card"><h3>Doğum Günü Ekle</h3>
+ <div class="row"><div><label>Ad Soyad</label><input type="text" id="b_name"></div><div><label>Sınıf / Görev</label><input type="text" id="b_cls" placeholder="5-A"></div><div><label>Doğum Tarihi</label><input type="date" id="b_date" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:9px"></div></div>
+ <div style="margin-top:12px;text-align:right"><button class="btn" onclick="addBd()">Ekle</button></div></div>
+ ${sorted.length?sorted.map(b=>`<div class="item"><div class="t"><b>${esc(b.name)}</b><small>${esc(b.className)} · ${b.date.split('-').reverse().join('.')}</small></div><button class="btn del" onclick="delItem('birthdays',${b.i})">Sil</button></div>`).join(''):'<div class="empty">Henüz kayıt yok</div>'}
+ <div class="card"><h3>Toplu Ekle</h3><label>Her satıra: Ad Soyad; Sınıf; GG.AA.YYYY</label><textarea id="b_bulk" style="min-height:90px" placeholder="Ali Veli; 5-A; 14.11.2013"></textarea><div style="margin-top:10px;text-align:right"><button class="btn sec" onclick="bulkBd()">Satırları Ekle</button></div></div>`},
+sched(){const L=S.schedule.days[schDay]||[];
+ return `<div class="card"><h3>Gün Seçin</h3><div class="row" style="gap:6px">${[1,2,3,4,5].map(d=>`<button class="btn ${d===schDay?'':'sec'} auto" onclick="pickDay(${d})">${DAYS[d]}</button>`).join('')}</div></div>
+ <div class="card"><h3>${DAYS[schDay]} Programı</h3>
+ <div id="sch">${L.map((l,i)=>schRow(l,i)).join('')||'<div class="empty">Bu gün için satır yok (hafta içi boş bırakılırsa pano ders göstermez)</div>'}</div>
+ <div class="row" style="margin-top:12px"><button class="btn sec auto" onclick="addLesson('lesson')">+ Ders</button><button class="btn sec auto" onclick="addLesson('break')">+ Teneffüs</button><span></span><button class="btn auto" onclick="saveSched()">Kaydet</button></div></div>
+ <div class="card"><h3>Otomatik Oluştur</h3><div style="font-size:12px;color:var(--mut);margin-bottom:6px">${DAYS[schDay]} programının yerine yazılır; sonra Kaydet'e basın.</div>
+ <div class="row"><div><label>İlk ders başlangıcı</label><input type="time" id="as_start" value="08:30"></div><div><label>Ders sayısı</label><input type="number" id="as_n" min="1" max="12" value="7"></div><div><label>Ders (dk)</label><input type="number" id="as_len" min="10" max="90" value="40"></div><div><label>Teneffüs (dk)</label><input type="number" id="as_brk" min="0" max="60" value="10"></div></div>
+ <div style="margin-top:12px;text-align:right"><button class="btn sec" onclick="autoSched()">Oluştur</button></div></div>
+ <div class="card"><h3>Kopyala</h3><div class="row"><span>${DAYS[schDay]} programını diğer tüm günlere kopyala:</span><button class="btn sec auto" onclick="copyDay()">Kopyala</button></div></div>`},
+pass(){return `<div class="card"><h3>Şifre Değiştir</h3>
+ <label>Mevcut şifre</label><input type="password" id="pw_cur" autocomplete="current-password">
+ <label>Yeni şifre (en az 6 karakter)</label><input type="password" id="pw_new" autocomplete="new-password">
+ <label>Yeni şifre (tekrar)</label><input type="password" id="pw_rep" autocomplete="new-password" onkeydown="if(event.key==='Enter')changePass()">
+ <div style="margin-top:14px;text-align:right"><button class="btn" onclick="changePass()">Şifreyi Değiştir</button></div></div>
+ <div class="card" style="font-size:13px;color:var(--mut)">Şifre sunucuda şifrelenmiş (hash) olarak <code>data/auth.json</code> dosyasına kaydedilir; bundan sonra <code>ADMIN_PASS</code> ortam değişkeni kullanılmaz.<br><br><b>Şifreyi unutursanız:</b> sunucuyu durdurup <code>data/auth.json</code> dosyasını silin ve yeniden başlatın; şifre yine <code>ADMIN_PASS</code> (ayarlı değilse <code>admin</code>) olur.</div>`},
+health(){return `<div class="card"><h3>Durum</h3><div class="stat" id="hstat"><div>Yükleniyor…</div></div>
+ <div style="margin-top:14px"><button class="btn sec" onclick="loadHealth()">Yenile</button></div></div>`},
+backup(){return `<div class="card"><h3>Yedek Al</h3><p style="color:var(--mut)">Tüm ayarlar, duyurular, nöbet ve doğum günü kayıtları tek JSON dosyası olarak iner. Logolar, slaytlar ve haber görselleri <code>uploads/</code> klasöründedir; bunları ayrıca kopyalayın.</p><a class="btn" href="#" onclick="dl();return false" style="text-decoration:none;display:inline-block">İndir</a></div>
+ <div class="card"><h3>Geri Yükle</h3><input type="file" id="rs" accept=".json"><div style="margin-top:12px"><button class="btn sec" onclick="restore()">Geri Yükle</button></div></div>
+ <div class="card" style="border-color:#fecaca"><h3 style="color:var(--danger)">Bilgileri Sıfırla</h3>
+ <p style="color:var(--mut);line-height:1.5">Okula ait tüm bilgileri siler: okul adı, <b>logolar</b>, duyurular, slaytlar, haberler (arşiv dahil), öğretmenler, nöbet çizelgeleri, doğum günleri, ders saatleri ve yüklenen tüm dosyalar. <b>Geri alınamaz</b>; önce yedek almanız önerilir.</p>
+ <label style="display:flex;gap:8px;align-items:center;font-weight:600;margin:12px 0"><input type="checkbox" id="rs_pw" style="width:auto"> Yönetici şifresini de sıfırla (ADMIN_PASS / admin'e döner)</label>
+ <label>Onay için SIFIRLA yazın</label><input type="text" id="rs_ok" placeholder="SIFIRLA" autocomplete="off">
+ <div style="margin-top:12px"><button class="btn del" onclick="resetAll()">Her Şeyi Sıfırla</button></div></div>`},
+news(){const n=S.news||{};const ft=n.fetchedAt?new Date(n.fetchedAt).toLocaleString('tr-TR'):'Henüz çekilmedi';return `<div class="card"><h3>Okul Sitesi Haberleri</h3>
+ <label>Okul sitesi adresi</label><input type="url" id="n_url" value="${esc(n.url)}" placeholder="https://okuladi.meb.k12.tr/">
+ <div class="row"><div><label>Panoda gösterilecek haber sayısı</label><input type="number" id="n_cnt" min="1" max="20" value="${n.count||8}"></div>
+ <div><label>Güncelleme aralığı</label><select id="n_int">${[[5,'5 dakika'],[10,'10 dakika'],[15,'15 dakika'],[30,'30 dakika'],[60,'1 saat'],[120,'2 saat'],[360,'6 saat'],[1440,'Günde 1 kez']].map(([v,t])=>`<option value="${v}" ${(n.intervalMin||30)===v?'selected':''}>${t}</option>`).join('')}</select></div></div>
+ <div class="row" style="margin-top:12px"><span class="tg">${sw('n_txt',n.showText!==false)} Haber metnini göster</span><span class="tg">${sw('n_img',n.showImage!==false)} Haber görselini göster</span></div>
+ <div class="row" style="margin-top:12px"><span class="tg">${sw('n_act',n.active)} Slaytlarda göster</span><span></span><button class="btn sec auto" onclick="saveNews(true)">Kaydet ve Şimdi Güncelle</button><button class="btn auto" onclick="saveNews(false)">Kaydet</button></div>
+ <div style="margin-top:10px;font-size:12px;color:var(--mut)">Seçtiğiniz aralıkta yalnızca haber listesi sayfasına bakılır; görsel ve içerik her haber için bir kez indirilip arşive kaydedilir. Okul sitesi kapalı olsa bile arşivdeki haberler gösterilir, eski haberler kendiliğinden silinmez. Son yeni haber çekimi: ${ft}${n.checkedAt?' · Son kontrol: '+new Date(n.checkedAt).toLocaleString('tr-TR'):''}</div>
+ ${n.error?`<div style="margin-top:8px;color:var(--danger);font-size:12px">Son hata: ${esc(n.error)}</div>`:''}</div>
+ <div class="card" style="border-color:#fecaca"><h3 style="color:var(--danger)">Haberleri Temizle</h3>
+ <p style="color:var(--mut);font-size:13px;line-height:1.5;margin:0 0 12px">Arşivdeki tüm haberleri ve görsellerini siler (şu an ${(n.items||[]).length} haber). Değişiklik hemen kaydedilir.</p>
+ <div class="row"><button class="btn del auto" onclick="clearNews('ignore')">Tümünü sil (yalnızca yeni haberler gelsin)</button><button class="btn sec auto" onclick="clearNews('refetch')">Tümünü sil ve siteden yeniden çek</button></div>
+ <div style="font-size:12px;color:var(--mut);margin-top:10px;line-height:1.5"><b>İlk seçenek:</b> okul sitesinde şu an görünen haberler de yoksayılır, yalnızca bundan sonra yayınlanan haberler eklenir. <b>İkinci seçenek:</b> arşiv sıfırdan, sitedeki güncel haberlerle yeniden oluşur.</div></div>
+ ${(n.items||[]).length?`<div style="color:var(--mut);font-size:12px;margin:0 2px 8px">Arşivde ${n.items.length} haber · panoda ilk ${n.count||8} açık haber gösterilir</div>`+n.items.map((x,i)=>`<div class="item" style="${x.hidden?'opacity:.55':''}"><span class="tg">${sw('',!x.hidden).replace('<input','<input onchange="togNews('+i+',this.checked)"')}</span>${x.image?`<img src="${esc(x.image)}">`:'<span style="font-size:28px">📰</span>'}<div class="t"><b>${esc(x.title)}</b><small>${esc((x.date||'').split('-').reverse().join('.'))} · ${esc((x.summary||'').slice(0,100))}</small></div><button class="btn sec" onclick="mvNews(${i},-1)">↑</button><button class="btn sec" onclick="mvNews(${i},1)">↓</button><button class="btn del" onclick="delNews(${i})">Sil</button></div>`).join(''):'<div class="empty">Henüz haber çekilmedi</div>'}`},
+about(){return `<div class="card"><h3>Okul Pano</h3><p>Okul İntranet TV'si için hazırlanmış yönetilebilir duyuru panosu.</p>
+ <p>Kodlayan: <b>Ali AKDOĞAN</b></p>
+ <p><b>Pano adresi:</b> <code>${location.origin}/</code><br><b>Yönetim adresi:</b> <code>${location.origin}/admin</code></p>
+ <p style="color:var(--mut)">TV tarayıcısında pano adresini tam ekran (F11 / kiosk) açın. Pano içerik değişince kendini otomatik yeniler.</p></div>`}
+};
+const logoBox=(side,label,url)=>`<div style="flex:1;min-width:230px"><label>${label}</label><div style="border:1px dashed var(--line);border-radius:12px;padding:12px;text-align:center;background:#fafbfc">${url?`<img src="${esc(url)}" style="max-height:90px;max-width:100%;background:#fff;border-radius:8px;padding:4px;border:1px solid var(--line)"><div style="margin-top:8px"><button class="btn del" onclick="delLogo('${side}')">Kaldır</button></div>`:'<div class="empty" style="padding:10px">Logo yüklenmedi</div>'}<input type="file" id="lg_${side}" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" onchange="upLogo('${side}',this)" style="margin-top:8px;max-width:100%"></div></div>`;
+const schRow=(l,i)=>`<div class="row" style="margin-bottom:8px"><select data-i="${i}" data-f="type" style="flex:none;width:110px"><option value="lesson" ${l.type!=='break'?'selected':''}>Ders</option><option value="break" ${l.type==='break'?'selected':''}>Teneffüs</option></select><input type="text" value="${esc(l.label)}" data-i="${i}" data-f="label"><input type="time" value="${l.start}" data-i="${i}" data-f="start"><input type="time" value="${l.end}" data-i="${i}" data-f="end"><button class="btn del auto" onclick="delLesson(${i})">Sil</button></div>`;
+
+function render(){
+  const map={pass:'pass',teachers:'teachers',news:'news',general:'general',ann:'ann',slides:'slides',yt:'yt',mods:'mods',spec:'spec',duty:'duty',bd:'bd',sched:'sched',health:'health',backup:'backup',about:'about'};
+  $('#main').innerHTML=(cur==='about'?`<h2>${TITLES.about[0]}</h2>`:header())+R[map[cur]]();
+  if(cur==='health')loadHealth();
+}
+
+// ---- actions ----
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+async function findCity(){
+  const q=$('#g_city').value.trim();if(!q)return toast('Şehir adı girin',1);
+  try{const r=await (await fetch('https://geocoding-api.open-meteo.com/v1/search?count=1&language=tr&name='+encodeURIComponent(q))).json();
+    if(!r.results||!r.results.length)return toast('Şehir bulunamadı',1);
+    const c=r.results[0];Object.assign(S.settings,{weatherCity:q,weatherLat:c.latitude,weatherLon:c.longitude,weatherLabel:[c.name,c.admin1].filter(Boolean).join(', ')});
+    $('#g_cityinfo').textContent='Seçili: '+S.settings.weatherLabel+' — Kaydet’e basmayı unutmayın';
+  }catch(e){toast('Konum servisine ulaşılamadı',1)}
+}
+function saveGeneral(){Object.assign(S.settings,{imageFit:$('#g_fit').value,showWeather:$('#g_wx').checked,schoolName:$('#g_name').value.trim(),theme:$('#g_theme').value,layout:$('#g_layout').value,sideWidth:+$('#g_side').value||0,slideSeconds:+$('#g_sec').value||10,tickerSpeed:+$('#g_tick').value||60,showClock:$('#g_clock').checked});save('settings')}
+function addAnn(){const t=$('#a_text').value.trim();if(!t)return toast('Yazı boş olamaz',1);S.announcements.unshift({id:uid(),text:t.slice(0,140),active:$('#a_act').checked,until:$('#a_until').value||''});save('announcements').then(render)}
+function togAnn(i,v){S.announcements[i].active=v;save('announcements')}
+function togItem(sec,i,v){S[sec][i].active=v;save(sec)}
+async function delItem(sec,i){if(!confirm('Silinsin mi?'))return;S[sec].splice(i,1);await save(sec);render()}
+async function mv(sec,i,d){const j=i+d;if(j<0||j>=S[sec].length)return;[S[sec][i],S[sec][j]]=[S[sec][j],S[sec][i]];await save(sec);render()}
+async function addSlide(){
+  const f=$('#s_file').files[0];if(!f)return toast('Dosya seçin',1);
+  try{const r=await api('POST','/api/upload',f,{'x-filename':encodeURIComponent(f.name),'Content-Type':'application/octet-stream'});
+    S.slides.push({id:uid(),url:r.url,caption:$('#s_cap').value.trim(),active:true});await save('slides');render()}catch(e){toast(e.message,1)}
+}
+async function delSlide(i){if(!confirm('Slayt silinsin mi?'))return;const u=S.slides[i].url;S.slides.splice(i,1);await save('slides');api('DELETE','/api/upload?f='+encodeURIComponent(u.split('/').pop())).catch(()=>{});render()}
+function newsPayload(){const it=S.news.items||[];const hidden={...((S.news.prefs&&S.news.prefs.hidden)||{})};it.forEach(x=>{if(x.hidden)hidden[x.link]=true;else delete hidden[x.link]});return {...S.news,order:it.map(x=>x.link),hidden}}
+async function saveNewsItems(){try{await api('PUT','/api/state/news',newsPayload());toast('Kaydedildi')}catch(e){toast(e.message,1)}}
+async function delNews(i){const x=S.news.items[i];if(!confirm('Bu haber arşivden silinsin mi?\n\n'+x.title+'\n\nSilinen haber okul sitesinde olsa bile tekrar eklenmez.'))return;try{await api('POST','/api/news/delete',{link:x.link});S=await (await fetch('/api/state')).json();render();toast('Silindi')}catch(e){toast(e.message,1)}}
+function togNews(i,v){S.news.items[i].hidden=!v;saveNewsItems().then(render)}
+function mvNews(i,d){const a=S.news.items,j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];saveNewsItems().then(render)}
+async function clearNews(mode){
+  const n=(S.news.items||[]).length;
+  const msg=mode==='ignore'?'Arşivdeki '+n+' haber ve görselleri silinecek. Okul sitesinde şu an görünen haberler de yoksayılacak; yalnızca bundan sonra yayınlanan haberler eklenecek. Devam edilsin mi?':'Arşivdeki '+n+' haber ve görselleri silinecek, ardından okul sitesindeki güncel haberler yeniden çekilecek. Devam edilsin mi?';
+  if(!confirm(msg))return;
+  try{toast('Temizleniyor…');const r=await api('POST','/api/news/clear',{mode});S=await (await fetch('/api/state')).json();render();
+    toast(r.warn?r.warn:(mode==='refetch'?r.added+' haber yeniden çekildi':'Tüm haberler temizlendi'),!!r.warn)}catch(e){toast(e.message,1)}
+}
+async function saveNews(now){
+  const sT=$('#n_txt').checked,sI=$('#n_img').checked;
+  if(!sT&&!sI)return toast('Metin ve görselden en az biri açık olmalı',1);
+  S.news={...S.news,url:$('#n_url').value.trim(),count:+$('#n_cnt').value||8,intervalMin:+$('#n_int').value||30,active:$('#n_act').checked,showText:sT,showImage:sI};
+  try{
+    await api('PUT','/api/state/news',S.news);
+    if(now){toast('Haberler çekiliyor…');const r=await api('POST','/api/news/refresh');toast(r.ok?(r.added?r.added+' yeni haber arşive eklendi':'Yeni haber yok')+' · arşivde '+r.count+' haber':'Hata: '+r.error,!r.ok)}else toast('Kaydedildi');
+    S=await (await fetch('/api/state')).json();render();
+  }catch(e){toast(e.message,1)}
+}
+function saveYt(){S.youtube={url:$('#y_url').value.trim(),active:$('#y_act').checked,muted:$('#y_mute').checked};save('youtube')}
+const upRaw=f=>api('POST','/api/upload',f,{'x-filename':encodeURIComponent(f.name),'Content-Type':'application/octet-stream'});
+async function addSpec(){
+  const t=$('#sp_t').value.trim(),f=$('#sp_f').files[0],im=$('#sp_i').files[0];
+  if(!t)return toast('Başlık girin',1);if(!f)return toast('HTML dosyası seçin',1);
+  if(!/\.html?$/i.test(f.name))return toast('Dosya .html olmalı',1);
+  if(!$('#sp_from').value&&!$('#sp_to').value)return toast('En az bir tarih girin',1);
+  try{toast('Yükleniyor…');
+    const fr=await upRaw(new File([f],f.name.replace(/\.htm$/i,'.html')));const ir=im?await upRaw(im):null;
+    S.specials=S.specials||[];
+    S.specials.push({id:uid(),title:t,file:fr.url,image:ir?ir.url:'',from:$('#sp_from').value,to:$('#sp_to').value,timeFrom:$('#sp_tf').value,timeTo:$('#sp_tt').value,active:true,pinned:false,hideControls:$('#sp_hide').checked,autoStart:$('#sp_auto').checked,useTeachers:$('#sp_names').checked});
+    await save('specials');render()}catch(e){toast(e.message,1)}
+}
+function updSpec(i,f,v){S.specials[i][f]=v;save('specials').then(render)}
+async function delSpec(i){const x=S.specials[i];if(!confirm('"'+x.title+'" silinsin mi?'))return;S.specials.splice(i,1);await save('specials');
+  [x.file,x.image].filter(Boolean).forEach(u=>api('DELETE','/api/upload?f='+encodeURIComponent(u.split('/').pop())).catch(()=>{}));render()}
+function addMod(){const t=$('#m_t').value.trim(),h=$('#m_h').value.trim();if(!t||!h)return toast('Başlık ve içerik gerekli',1);S.modules.push({id:uid(),title:t,html:h,active:$('#m_act').checked});save('modules').then(render)}
+function addBd(){const n=$('#b_name').value.trim(),d=$('#b_date').value;if(!n||!d)return toast('Ad ve tarih gerekli',1);S.birthdays.push({id:uid(),name:n,className:$('#b_cls').value.trim(),date:d});save('birthdays').then(render)}
+function bulkBd(){let n=0;$('#b_bulk').value.split('\n').forEach(l=>{const p=l.split(/[;,\t]/).map(x=>x.trim());const m=(p[2]||'').match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})$/);if(p[0]&&m){S.birthdays.push({id:uid(),name:p[0],className:p[1]||'',date:`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`});n++}});if(!n)return toast('Geçerli satır yok',1);save('birthdays').then(()=>{toast(n+' kayıt eklendi');render()})}
+function sortT(){S.teachers.sort((a,b)=>a.name.localeCompare(b.name,'tr'))}
+const normName=n=>String(n||'').trim().replace(/\s+/g,' ').toLocaleUpperCase('tr');
+function addTeacher(){const n=normName($('#t_name').value);if(!n)return toast('Ad soyad girin',1);if(S.teachers.some(t=>t.name===n))return toast('Bu öğretmen zaten var',1);S.teachers.push({id:uid(),name:n});sortT();save('teachers').then(render)}
+function bulkTeachers(){let c=0;$('#t_bulk').value.split('\n').forEach(l=>{const n=normName(l);if(n&&!S.teachers.some(t=>t.name===n)){S.teachers.push({id:uid(),name:n});c++}});if(!c)return toast('Eklenecek yeni isim yok',1);sortT();save('teachers').then(()=>{toast(c+' öğretmen eklendi');render()})}
+function tListHtml(){const q=normName(tq);const L=S.teachers.map((t,i)=>({t,i})).filter(x=>!q||x.t.name.includes(q));return L.length?L.map(({t,i})=>`<div class="item"><input type="text" id="tn_${i}" value="${esc(t.name)}" onkeydown="if(event.key==='Enter')renameTeacher(${i})"><select style="width:160px;flex:none" onchange="setRole(${i},this.value)"><option value="">Öğretmen</option><option value="mudur" ${t.role==='mudur'?'selected':''}>Müdür</option><option value="yardimci" ${t.role==='yardimci'?'selected':''}>Müdür Yardımcısı</option></select><small style="width:150px;flex:none">Panoda: <b>${esc(shortName(t.name))}</b></small><button class="btn sec" onclick="renameTeacher(${i})">Güncelle</button><button class="btn del" onclick="delTeacher(${i})">Sil</button></div>`).join(''):'<div class="empty">Kayıt bulunamadı</div>'}
+function setRole(i,v){if(v==='mudur')S.teachers.forEach(t=>{if(t.role==='mudur')t.role='yardimci'});if(v)S.teachers[i].role=v;else delete S.teachers[i].role;save('teachers').then(render)}
+function drawTeachers(){$('#t_list').innerHTML=tListHtml()}
+function renameTeacher(i){const n=normName($('#tn_'+i).value);if(!n)return toast('Ad soyad boş olamaz',1);if(S.teachers.some((t,j)=>j!==i&&t.name===n))return toast('Bu isimde başka öğretmen var',1);S.teachers[i].name=n;sortT();save('teachers').then(render)}
+async function changePass(){
+  const c=$('#pw_cur').value,n=$('#pw_new').value,r=$('#pw_rep').value;
+  if(!c||!n)return toast('Tüm alanları doldurun',1);
+  if(n.length<6)return toast('Yeni şifre en az 6 karakter olmalı',1);
+  if(n!==r)return toast('Yeni şifreler aynı değil',1);
+  try{await api('POST','/api/password',{current:c,next:n});KEY=n;sessionStorage.setItem('k',n);['#pw_cur','#pw_new','#pw_rep'].forEach(x=>$(x).value='');toast('Şifre değiştirildi')}catch(e){toast(e.message,1)}
+}
+async function delTeacher(i){const t=S.teachers[i];if(!confirm(t.name+' silinsin mi? Nöbet çizelgelerindeki yerleri de boşalır.'))return;S.teachers.splice(i,1);S.duty.schedules.forEach(c=>{Object.keys(c.cells).forEach(k=>{if(c.cells[k]===t.id)delete c.cells[k]});if(c.vice===t.id)c.vice=''});await save('teachers');await save('duty');render()}
+
+// ---- logolar ----
+async function upLogo(side,inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>5*1024*1024){inp.value='';return toast('Dosya en fazla 5 MB olabilir',1)}
+  try{
+    const old=S.settings[side];
+    const r=await api('POST','/api/upload',f,{'x-filename':encodeURIComponent(f.name),'Content-Type':'application/octet-stream'});
+    S.settings[side]=r.url;await save('settings');
+    if(old)api('DELETE','/api/upload?f='+encodeURIComponent(old.split('/').pop())).catch(()=>{});
+    render();
+  }catch(e){toast(e.message,1)}
+}
+async function delLogo(side){const old=S.settings[side];S.settings[side]='';await save('settings');if(old)api('DELETE','/api/upload?f='+encodeURIComponent(old.split('/').pop())).catch(()=>{});render()}
+async function resetAll(){
+  if($('#rs_ok').value.trim()!=='SIFIRLA')return toast('Onay için SIFIRLA yazın',1);
+  if(!confirm('Tüm bilgiler silinecek. Emin misiniz?'))return;
+  const pw=$('#rs_pw').checked;
+  try{await api('POST','/api/reset',{confirm:'SIFIRLA',resetPassword:pw});
+    dutyCur=null;tq='';schDay=1;
+    if(pw){sessionStorage.removeItem('k');location.reload();return}
+    await init();toast('Tüm bilgiler sıfırlandı')}catch(e){toast(e.message,1)}
+}
+function autoSched(){
+  const st=$('#as_start').value||'08:30',n=Math.min(12,Math.max(1,+$('#as_n').value||1)),len=+$('#as_len').value||40,br=+$('#as_brk').value||0;
+  if((S.schedule.days[schDay]||[]).length&&!confirm(DAYS[schDay]+' programı silinip yeniden oluşturulacak. Emin misiniz?'))return;
+  const out=[];let t=st;
+  for(let i=1;i<=n;i++){const e=addMin(t,len);out.push({label:i+'. DERS',start:t,end:e,type:'lesson'});t=e;if(i<n&&br>0){const e2=addMin(t,br);out.push({label:i+'. TENEFFÜS',start:t,end:e2,type:'break'});t=e2}}
+  S.schedule.days[schDay]=out;render();toast('Oluşturuldu; Kaydet\'e basın');
+}
+
+// ---- aylık nöbet çizelgeleri ----
+const MONTHS=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const fmtD=d=>d?d.split('-').reverse().join('.'):'—';
+const monthName=iso=>iso?MONTHS[+iso.slice(5,7)-1]+' '+iso.slice(0,4):'Çizelge';
+const midIso=(f,t)=>{if(!f||!t)return f||t||'';return isoD(new Date((new Date(f+'T12:00:00').getTime()+new Date(t+'T12:00:00').getTime())/2))};
+const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+let dutyCur=null;
+function dActive(){const t=today();return S.duty.schedules.filter(x=>!x._draft&&(!x.validFrom||t>=x.validFrom)&&(!x.validTo||t<=x.validTo)).sort((a,b)=>(b.validFrom||'').localeCompare(a.validFrom||''))[0]}
+function dCur(){const L=S.duty.schedules;let c=L.find(x=>x.id===dutyCur);if(!c){c=dActive()||L[0]||null;dutyCur=c?c.id:null}return c}
+function nextDates(base){
+  if(base&&base.validTo){const d=new Date(base.validTo+'T12:00:00');d.setDate(d.getDate()+1);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);const e=new Date(d);e.setDate(e.getDate()+25);return [isoD(d),isoD(e)]}
+  const n=new Date();return [isoD(new Date(n.getFullYear(),n.getMonth(),1)),isoD(new Date(n.getFullYear(),n.getMonth()+1,0))]
+}
+function dEditor(c){
+  const T=S.teachers;
+  const news=[...new Set([...Object.values(c.cells),c.vice].filter(v=>typeof v==='string'&&v.startsWith('new:')))];
+  const opt=sel=>'<option value="">—</option>'+T.map(t=>`<option value="${t.id}" ${t.id===sel?'selected':''}>${esc(t.name)}</option>`).join('')+news.map(v=>`<option value="${esc(v)}" ${v===sel?'selected':''}>➕ ${esc(v.slice(4))} (yeni)</option>`).join('');
+  const di='style="width:100%;padding:8px;border:1px solid var(--line);border-radius:9px"';
+  return `<div class="card"><h3>Seçili Çizelge${c._draft?' <span style="font-size:12px;color:#b45309">(kaydedilmedi)</span>':''}</h3>
+  ${c._note?`<div style="background:#fff7e0;border:1px solid #f1d27a;border-radius:9px;padding:10px;font-size:13px;margin-bottom:12px;line-height:1.55">${c._note}</div>`:''}
+  <div class="row"><div><label>Çizelge adı</label><input type="text" id="du_name" value="${esc(c.name||'')}"></div>
+  <div><label>Geçerlilik başlangıcı</label><input type="date" id="du_from" value="${esc(c.validFrom||'')}" ${di}></div>
+  <div><label>Geçerlilik bitişi</label><input type="date" id="du_to" value="${esc(c.validTo||'')}" ${di}></div></div>
+  <div class="row"><div><label>Nöbetçi Müdür Yardımcısı</label><select id="du_vice">${opt(c.vice)}</select></div></div>
+  <div style="font-size:12px;color:var(--mut);margin-top:8px">Pano, bugünün tarihine uyan çizelgeyi gösterir; hiçbiri uymazsa nöbet kartı gizlenir. Öğretmen listesi boşsa önce Öğretmenler sayfasından ekleyin ya da Excel'den yüklerken otomatik eklenmesini sağlayın.</div></div>
+ <div class="card"><h3>Nöbet Yerleri</h3>
+ <div class="row"><input type="text" id="du_place" placeholder="Örn. Bahçe, 3.Kat, Spor Salonu" onkeydown="if(event.key==='Enter')addPlace()"><button class="btn auto" onclick="addPlace()">Ekle</button></div>
+ <div style="margin-top:10px">${c.places.map((p,i)=>`<div class="item"><input type="text" data-pname="${p.id}" value="${esc(p.name)}"><button class="btn sec" onclick="mvPlace(${i},-1)">↑</button><button class="btn sec" onclick="mvPlace(${i},1)">↓</button><button class="btn del" onclick="delPlace(${i})">Sil</button></div>`).join('')||'<div class="empty">Henüz nöbet yeri yok</div>'}</div></div>
+ <div class="card" style="overflow:auto"><h3>Nöbet Tablosu</h3>${c.places.length?`<table style="width:100%;border-collapse:collapse;min-width:680px"><tr><th style="text-align:left;padding:6px;font-size:12px">YER</th>${[1,2,3,4,5].map(x=>`<th style="text-align:left;padding:6px;font-size:12px">${DAYS[x].toUpperCase()}</th>`).join('')}</tr>${c.places.map(p=>`<tr><td style="padding:6px;font-weight:700;white-space:nowrap">${esc(p.name)}</td>${[1,2,3,4,5].map(x=>`<td style="padding:4px"><select data-cell="${p.id}|${x}" style="font-size:12px;padding:7px">${opt(c.cells[p.id+'|'+x])}</select></td>`).join('')}</tr>`).join('')}</table>`:'<div class="empty">Önce nöbet yeri ekleyin</div>'}
+ <div style="margin-top:14px;text-align:right"><button class="btn" onclick="dSave()">Kaydet</button></div></div>`;
+}
+function dRead(){
+  const c=dCur();if(!c||!$('#du_from'))return c;
+  c.name=$('#du_name').value.trim();c.validFrom=$('#du_from').value;c.validTo=$('#du_to').value;c.vice=$('#du_vice').value;
+  document.querySelectorAll('[data-cell]').forEach(s=>{if(s.value)c.cells[s.dataset.cell]=s.value;else delete c.cells[s.dataset.cell]});
+  document.querySelectorAll('[data-pname]').forEach(i=>{const p=c.places.find(x=>x.id===i.dataset.pname);if(p&&i.value.trim())p.name=i.value.trim()});
+  return c;
+}
+function dPick(id){dRead();dutyCur=id;render()}
+function dAdd(fromId,withCells){
+  dRead();const base=S.duty.schedules.find(x=>x.id===fromId)||dCur();const [f,t]=nextDates(base);
+  const idMap={};const places=(base?base.places:[]).map(p=>{const id=uid();idMap[p.id]=id;return {id,name:p.name}});
+  const cells={};if(withCells&&base)Object.entries(base.cells).forEach(([k,v])=>{const [pid,day]=k.split('|');if(idMap[pid])cells[idMap[pid]+'|'+day]=v});
+  const n={id:uid(),name:monthName(midIso(f,t)),validFrom:f,validTo:t,vice:withCells&&base?(base.vice||''):'',places,cells};
+  S.duty.schedules.push(n);dutyCur=n.id;save('duty').then(render);
+}
+function dDel(id){if(!confirm('Çizelge silinsin mi?'))return;S.duty.schedules=S.duty.schedules.filter(x=>x.id!==id);if(dutyCur===id)dutyCur=null;save('duty').then(render)}
+async function dResolveNew(c){
+  const map={};let added=false;
+  const get=v=>{if(!(typeof v==='string'&&v.startsWith('new:')))return v;const n=normName(v.slice(4));if(!map[n]){let t=S.teachers.find(x=>x.name===n);if(!t){t={id:uid(),name:n};S.teachers.push(t);added=true}map[n]=t.id}return map[n]};
+  Object.keys(c.cells).forEach(k=>c.cells[k]=get(c.cells[k]));c.vice=get(c.vice)||'';
+  if(added){sortT();await save('teachers')}
+}
+async function dSave(){
+  const c=dRead();if(!c)return;
+  if(!c.name)c.name=monthName(midIso(c.validFrom,c.validTo));
+  delete c._draft;delete c._note;
+  await dResolveNew(c);
+  const ov=S.duty.schedules.filter(x=>x.id!==c.id&&c.validFrom&&c.validTo&&x.validFrom&&x.validTo&&x.validFrom<=c.validTo&&x.validTo>=c.validFrom);
+  await save('duty');render();
+  if(ov.length)toast('Uyarı: tarihler "'+ov[0].name+'" ile çakışıyor; çakışan günlerde daha geç başlayan çizelge gösterilir',1);
+}
+function dPersist(c){if(c._draft)render();else save('duty').then(render)}
+function addPlace(){const c=dRead();if(!c)return;const n=$('#du_place').value.trim();if(!n)return toast('Yer adı girin',1);c.places.push({id:uid(),name:n});dPersist(c)}
+function delPlace(i){const c=dRead();if(!c||!confirm('Nöbet yeri silinsin mi?'))return;const p=c.places.splice(i,1)[0];Object.keys(c.cells).forEach(k=>{if(k.startsWith(p.id+'|'))delete c.cells[k]});dPersist(c)}
+function mvPlace(i,d){const c=dRead();if(!c)return;const a=c.places,j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];dPersist(c)}
+
+// ---- Excel'den nöbet okuma (SheetJS tarayıcıda çalışır; sunucu bağımlılığı yok) ----
+const asc=s=>String(s??'').toLocaleUpperCase('tr').replace(/[ÇĞİÖŞÜ]/g,c=>({'Ç':'C','Ğ':'G','İ':'I','Ö':'O','Ş':'S','Ü':'U'}[c])).replace(/\s+/g,' ').trim();
+const DAYMAP={PAZARTESI:1,SALI:2,CARSAMBA:3,PERSEMBE:4,CUMA:5};
+const dayOf=t=>DAYMAP[asc(t).replace(/[^A-Z]/g,'')]||0;
+const tokens=n=>asc(n).replace(/[^A-Z0-9]+/g,' ').split(' ').filter(Boolean);
+function matchTeacher(raw){
+  const a=tokens(raw);if(!a.length)return null;let best=null,bs=0;
+  for(const t of S.teachers){
+    const b=tokens(t.name);if(!b.length)continue;let sc=0;
+    const la=a[a.length-1],lb=b[b.length-1],fa=a[0],fb=b[0];
+    const fo=fa===fb?2:(fa.startsWith(fb)||fb.startsWith(fa))?1:0;
+    if(la===lb&&fo)sc=10+fo*2;
+    else{const sa=new Set(a),sb=new Set(b);const inter=[...sa].filter(x=>sb.has(x)).length;const j=inter/new Set([...sa,...sb]).size;if(j>=.6)sc=5+j}
+    if(sc>bs){bs=sc;best=t}
+  }
+  return best;
+}
+function loadScript(src){return new Promise((res,rej)=>{if(window.XLSX)return res();const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('Excel okuyucu yüklenemedi'));document.head.appendChild(s)})}
+async function parseExcel(f){
+  await loadScript('/vendor/xlsx.full.min.js');
+  const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
+  for(const sn of wb.SheetNames){
+    const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:'',blankrows:false,raw:false});
+    const r=gridRows(rows);if(r&&r.places.length)return r;
+  }
+  return null;
+}
+function gridRows(rows){
+  let hi=-1,cols={};
+  for(let i=0;i<rows.length;i++){const m={};rows[i].forEach((c,j)=>{const d=dayOf(c);if(d)m[d]=j});if(Object.keys(m).length>=3){hi=i;cols=m;break}}
+  if(hi<0)return null;
+  const first=Math.min(...Object.values(cols)),places=[];
+  for(let i=hi+1;i<rows.length;i++){
+    const row=rows[i];
+    const name=String(row.slice(0,first).map(x=>String(x).trim()).find(Boolean)||'');
+    const vals={};Object.entries(cols).forEach(([d,j])=>{const v=String(row[j]??'').replace(/\s*\n\s*/g,' ').trim();if(v)vals[d]=v});
+    if(/NOBETLER|NOBETCI|MUDUR|GECERLI/.test(asc(name)))break;
+    if(!name||!Object.keys(vals).length)continue;
+    places.push({name,vals});
+  }
+  return {places,lines:rows.map(r=>r.map(x=>String(x).trim()).filter(Boolean).join(' '))};
+}
+function extractMeta(lines){
+  let from='',to='',vice='';const z=n=>String(n).padStart(2,'0');
+  for(const l of lines){
+    const m=l.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})\s*[-–—]\s*(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{4})/);
+    if(m&&!from){from=m[3]+'-'+z(m[2])+'-'+z(m[1]);to=m[6]+'-'+z(m[5])+'-'+z(m[4])}
+    const v=l.match(/M[ÜU]D[ÜU]R\s+YARD[İIiı]MC[İIiı]S[İIiı]\s*:?\s*(.+)$/i);
+    if(v&&!vice&&v[1].trim())vice=v[1].trim();
+  }
+  return {from,to,vice};
+}
+function draftFromResult(res){
+  const meta=extractMeta(res.lines);
+  const places=res.places.map(p=>({id:uid(),name:p.name}));const cells={};
+  let ok=0;const nw=[],mapped=[];
+  const pick=txt=>{const t=matchTeacher(txt);if(t){if(tokens(txt).join(' ')!==tokens(t.name).join(' '))mapped.push([txt,t.name]);ok++;return t.id}const n=normName(txt);nw.push(n);return 'new:'+n};
+  res.places.forEach((p,i)=>Object.entries(p.vals).forEach(([d,txt])=>{cells[places[i].id+'|'+d]=pick(txt)}));
+  const vice=meta.vice?pick(meta.vice):'';
+  const uniqNew=[...new Set(nw)];
+  let note=`<b>Excel'den okundu:</b> ${places.length} nöbet yeri, ${Object.keys(cells).length} kayıt.`;
+  if(mapped.length)note+=`<br>Listedeki adlarla eşleştirildi: ${mapped.slice(0,8).map(m=>esc(m[0])+' → '+esc(m[1])).join('; ')}${mapped.length>8?'…':''}.`;
+  if(uniqNew.length)note+=`<br><b>Öğretmen listesinde bulunmayan ${uniqNew.length} isim</b> ➕ ile işaretlendi (${uniqNew.slice(0,6).map(esc).join(', ')}${uniqNew.length>6?'…':''}). Doğru öğretmeni seçebilirsiniz; olduğu gibi bırakırsanız Kaydet'e basınca yeni öğretmen olarak eklenir.`;
+  if(!meta.from)note+='<br>Geçerlilik tarihleri dosyada bulunamadı; lütfen aşağıya girin.';
+  note+='<br>Kontrol edip <b>Kaydet</b>\'e basın; kaydedilmeden panoda görünmez.';
+  return {id:uid(),name:monthName(midIso(meta.from,meta.to)),validFrom:meta.from,validTo:meta.to,vice,places,cells,_draft:true,_note:note};
+}
+async function dImport(inp){
+  const f=inp.files[0];if(!f)return;const msg=$('#du_msg');
+  msg.innerHTML='<div style="margin-top:10px;color:var(--mut)">Dosya okunuyor…</div>';
+  try{
+    const res=await parseExcel(f);
+    if(!res||!res.places.length)throw new Error('Dosyada gün başlıklı (Pazartesi…Cuma) ve dolu satırlı bir nöbet tablosu bulunamadı. Örnek şablonu indirip karşılaştırın.');
+    dRead();const d=draftFromResult(res);S.duty.schedules.push(d);dutyCur=d.id;render();
+  }catch(e){msg.innerHTML=`<div style="margin-top:10px;color:var(--danger)">${esc(e.message)}</div>`}
+  inp.value='';
+}
+async function dTemplate(){
+  try{
+    await loadScript('/vendor/xlsx.full.min.js');
+    const [f,t]=nextDates(dCur());const k=d=>d.split('-').reverse().join('.');
+    const aoa=[['NÖBET YERİ','PAZARTESİ','SALI','ÇARŞAMBA','PERŞEMBE','CUMA'],['BAHÇE','','','','',''],['ZEMİN KAT','','','','',''],['1. KAT','','','','',''],['2. KAT','','','','',''],[],['NÖBETLER '+k(f)+'-'+k(t)+' TARİHLERİ ARASINDA GEÇERLİDİR.'],['NÖBETÇİ MÜDÜR YARDIMCISI: ']];
+    const ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=[{wch:18},{wch:24},{wch:24},{wch:24},{wch:24},{wch:24}];
+    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Nöbet');XLSX.writeFile(wb,'nobet-sablonu.xlsx');
+  }catch(e){toast(e.message,1)}
+}
+function readSched(){document.querySelectorAll('#sch [data-i]').forEach(e=>{S.schedule.days[schDay][+e.dataset.i][e.dataset.f]=e.value})}
+function pickDay(d){readSched();schDay=d;S.schedule.days[d]=S.schedule.days[d]||[];render()}
+function addLesson(type){readSched();const a=S.schedule.days[schDay]=S.schedule.days[schDay]||[];const n=a.filter(x=>x.type===type).length+1;const st=a.length?a[a.length-1].end:'08:00';a.push({label:type==='lesson'?n+'. DERS':n+'. TENEFFÜS',start:st,end:addMin(st,type==='lesson'?40:10),type});render()}
+function delLesson(i){readSched();S.schedule.days[schDay].splice(i,1);render()}
+function saveSched(){readSched();S.schedule.days[schDay].sort((a,b)=>a.start.localeCompare(b.start));save('schedule').then(render)}
+function copyDay(){readSched();if(!confirm(DAYS[schDay]+' programı diğer tüm günlerin üzerine yazılacak. Emin misiniz?'))return;const src=JSON.stringify(S.schedule.days[schDay]);for(let d=1;d<=5;d++)if(d!==schDay)S.schedule.days[d]=JSON.parse(src);save('schedule').then(()=>toast('Kopyalandı'))}
+async function loadHealth(){
+  try{const h=await api('GET','/api/health');const lp=h.lastPing?new Date(h.lastPing.at):null;const ago=lp?Math.round((Date.now()-lp)/1000):null;const ok=ago!==null&&ago<90;
+  const up=s=>s>3600?Math.floor(s/3600)+' sa '+Math.floor(s%3600/60)+' dk':Math.floor(s/60)+' dk';
+  $('#hstat').innerHTML=`<div>Sunucu<b><span class="dot" style="background:var(--ok)"></span>Çalışıyor</b></div>
+   <div>Pano (TV)<b><span class="dot" style="background:${ok?'var(--ok)':'var(--danger)'}"></span>${lp?(ok?'Bağlı':'Yanıt yok'):'Hiç bağlanmadı'}</b>${lp?`<small>${ago} sn önce</small>`:''}</div>
+   <div>Çalışma süresi<b>${up(h.uptime)}</b></div><div>İçerik sürümü<b>${h.version}</b></div>
+   <div>Yüklemeler<b>${h.uploadCount} dosya</b><small>${(h.uploadBytes/1048576).toFixed(1)} MB</small></div><div>Bellek<b>${h.memoryMB} MB</b></div>`}catch(e){}
+}
+async function dl(){const r=await fetch('/api/backup',{headers:{'x-admin-key':encodeURIComponent(KEY)}});const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pano-yedek.json';a.click()}
+async function restore(){const f=$('#rs').files[0];if(!f)return toast('Dosya seçin',1);if(!confirm('Mevcut veriler üzerine yazılacak. Emin misiniz?'))return;try{await api('POST','/api/restore',JSON.parse(await f.text()));await init();toast('Geri yüklendi')}catch(e){toast('Geçersiz yedek',1)}}
+
+async function init(){
+  S=await (await fetch('/api/state')).json();
+  buildNav();render();
+}
+(async()=>{if(KEY){const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:KEY})});if(r.ok){$('#login').style.display='none';init()}}})();
+</script>
+</body>
+</html>

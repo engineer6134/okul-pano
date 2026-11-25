@@ -1,0 +1,727 @@
+{
+  "version": 246,
+  "settings": {
+    "schoolName": "TAHİR KAYA İMAM HATİP ORTAOKULU",
+    "logoLeft": "/uploads/1794997359260-fybh4.jpg",
+    "logoRight": "/uploads/1794997363704-h37ku.jpg",
+    "theme": "blue",
+    "showClock": true,
+    "showWeather": true,
+    "slideSeconds": 10,
+    "tickerSpeed": 60,
+    "layout": "split",
+    "imageFit": "cover",
+    "weatherCity": "Pendik",
+    "weatherLat": 40.8775,
+    "weatherLon": 29.2725,
+    "weatherLabel": "Pendik, İstanbul"
+  },
+  "announcements": [
+    {
+      "id": "09qjfxco",
+      "text": "İyi Tatiller Çocuklar",
+      "active": true,
+      "until": "2026-11-23"
+    }
+  ],
+  "slides": [
+    {
+      "id": "5lvuapct",
+      "url": "/uploads/1794997470106-ckk7l.jpg",
+      "caption": "",
+      "active": false
+    }
+  ],
+  "youtube": {
+    "url": "",
+    "active": false,
+    "muted": true
+  },
+  "modules": [],
+  "specials": [
+    {
+      "id": "qawmh3oz",
+      "title": "111",
+      "file": "/uploads/1795503230243-dvlur.html",
+      "image": "",
+      "from": "2026-11-24",
+      "to": "2026-11-24",
+      "timeFrom": "",
+      "timeTo": "",
+      "active": true,
+      "pinned": false,
+      "hideControls": true,
+      "autoStart": true,
+      "useTeachers": true
+    }
+  ],
+  "teachers": [
+    {
+      "id": "u3y9z10m",
+      "name": "ASUDE MALKUÇ"
+    },
+    {
+      "id": "u1d90n6f",
+      "name": "AYŞENUR B. ÇALIŞKAN"
+    },
+    {
+      "id": "wmxh19vg",
+      "name": "BAHTİYAR GÜZEL"
+    },
+    {
+      "id": "uektzp3n",
+      "name": "BARIŞ DERELİ"
+    },
+    {
+      "id": "fpvw35cv",
+      "name": "BURCU BAKIŞLI"
+    },
+    {
+      "id": "l0gjh9i7",
+      "name": "BURCU YILDIRIM"
+    },
+    {
+      "id": "yqqmdfjl",
+      "name": "BUŞRA ÇİTEKCİ CENİK"
+    },
+    {
+      "id": "muri9tu1",
+      "name": "CEVAHİR AKTULUM"
+    },
+    {
+      "id": "ify6glge",
+      "name": "DERYA GÖKDEMİR"
+    },
+    {
+      "id": "vymr41xv",
+      "name": "EBRU ERKAN KÖROĞLU"
+    },
+    {
+      "id": "8m41jn7h",
+      "name": "ELİF TÜRKGİL"
+    },
+    {
+      "id": "q40byagm",
+      "name": "ELİF URİN"
+    },
+    {
+      "id": "aijza4rm",
+      "name": "ERGİN ZARARSIZ",
+      "role": "yardimci"
+    },
+    {
+      "id": "7p6k5abb",
+      "name": "GÖNÜL AKGÜL"
+    },
+    {
+      "id": "431vneil",
+      "name": "HAKAN ER"
+    },
+    {
+      "id": "mw7tpuif",
+      "name": "İ.FURKAN BAŞ"
+    },
+    {
+      "id": "8hisyby4",
+      "name": "NERMİN UĞUR",
+      "role": "mudur"
+    },
+    {
+      "id": "vwe4pwdg",
+      "name": "NURBEYZA İLGAR"
+    },
+    {
+      "id": "13ajdgi0",
+      "name": "ÖMÜR EVRAN"
+    },
+    {
+      "id": "zaw7gjof",
+      "name": "SEDA BİLGİLİ"
+    },
+    {
+      "id": "70auat37",
+      "name": "SERTAP TATAR"
+    },
+    {
+      "id": "m0yf5n5o",
+      "name": "YASEMİN ÜNAL"
+    }
+  ],
+  "duty": {
+    "schedules": [
+      {
+        "id": "w6r8glgq",
+        "name": "Çizelge",
+        "validFrom": "2026-11-01",
+        "validTo": "2026-11-30",
+        "vice": "",
+        "places": [
+          {
+            "id": "3oaaeddp",
+            "name": "BAHÇE"
+          },
+          {
+            "id": "bycgjaim",
+            "name": "ZEMİN/KANTİN"
+          },
+          {
+            "id": "edn7rxv8",
+            "name": "1.KAT"
+          },
+          {
+            "id": "mqhq7z0i",
+            "name": "2.KAT"
+          }
+        ],
+        "cells": {
+          "3oaaeddp|1": "8m41jn7h",
+          "3oaaeddp|2": "yqqmdfjl",
+          "3oaaeddp|3": "ify6glge",
+          "3oaaeddp|4": "vymr41xv",
+          "3oaaeddp|5": "m0yf5n5o",
+          "bycgjaim|1": "q40byagm",
+          "bycgjaim|2": "7p6k5abb",
+          "bycgjaim|3": "uektzp3n",
+          "bycgjaim|4": "wmxh19vg",
+          "bycgjaim|5": "431vneil",
+          "edn7rxv8|1": "70auat37",
+          "edn7rxv8|2": "l0gjh9i7",
+          "edn7rxv8|3": "zaw7gjof",
+          "edn7rxv8|4": "mw7tpuif",
+          "edn7rxv8|5": "muri9tu1",
+          "mqhq7z0i|1": "u1d90n6f",
+          "mqhq7z0i|2": "13ajdgi0",
+          "mqhq7z0i|3": "fpvw35cv",
+          "mqhq7z0i|4": "u3y9z10m",
+          "mqhq7z0i|5": "vwe4pwdg"
+        }
+      }
+    ]
+  },
+  "birthdays": [],
+  "schedule": {
+    "days": {
+      "1": [
+        {
+          "label": "1. DERS",
+          "start": "08:00",
+          "end": "08:40",
+          "type": "lesson"
+        },
+        {
+          "label": "1. TENEFFÜS",
+          "start": "08:40",
+          "end": "08:50",
+          "type": "break"
+        },
+        {
+          "label": "2. DERS",
+          "start": "08:50",
+          "end": "09:30",
+          "type": "lesson"
+        },
+        {
+          "label": "2. TENEFFÜS",
+          "start": "09:30",
+          "end": "09:40",
+          "type": "break"
+        },
+        {
+          "label": "3. DERS",
+          "start": "09:40",
+          "end": "10:20",
+          "type": "lesson"
+        },
+        {
+          "label": "3. TENEFFÜS",
+          "start": "10:20",
+          "end": "10:30",
+          "type": "break"
+        },
+        {
+          "label": "4. DERS",
+          "start": "10:30",
+          "end": "11:10",
+          "type": "lesson"
+        },
+        {
+          "label": "4. TENEFFÜS",
+          "start": "11:10",
+          "end": "11:20",
+          "type": "break"
+        },
+        {
+          "label": "5. DERS",
+          "start": "11:20",
+          "end": "12:00",
+          "type": "lesson"
+        },
+        {
+          "label": "5. TENEFFÜS",
+          "start": "12:00",
+          "end": "12:10",
+          "type": "break"
+        },
+        {
+          "label": "6. DERS",
+          "start": "12:10",
+          "end": "12:50",
+          "type": "lesson"
+        },
+        {
+          "label": "6. TENEFFÜS",
+          "start": "12:50",
+          "end": "13:00",
+          "type": "break"
+        },
+        {
+          "label": "7. DERS",
+          "start": "13:00",
+          "end": "13:40",
+          "type": "lesson"
+        },
+        {
+          "label": "7. TENEFFÜS",
+          "start": "13:40",
+          "end": "13:50",
+          "type": "break"
+        },
+        {
+          "label": "8. DERS",
+          "start": "13:50",
+          "end": "14:30",
+          "type": "lesson"
+        }
+      ],
+      "2": [
+        {
+          "label": "1. DERS",
+          "start": "08:00",
+          "end": "08:40",
+          "type": "lesson"
+        },
+        {
+          "label": "1. TENEFFÜS",
+          "start": "08:40",
+          "end": "08:50",
+          "type": "break"
+        },
+        {
+          "label": "2. DERS",
+          "start": "08:50",
+          "end": "09:30",
+          "type": "lesson"
+        },
+        {
+          "label": "2. TENEFFÜS",
+          "start": "09:30",
+          "end": "09:40",
+          "type": "break"
+        },
+        {
+          "label": "3. DERS",
+          "start": "09:40",
+          "end": "10:20",
+          "type": "lesson"
+        },
+        {
+          "label": "3. TENEFFÜS",
+          "start": "10:20",
+          "end": "10:30",
+          "type": "break"
+        },
+        {
+          "label": "4. DERS",
+          "start": "10:30",
+          "end": "11:10",
+          "type": "lesson"
+        },
+        {
+          "label": "4. TENEFFÜS",
+          "start": "11:10",
+          "end": "11:20",
+          "type": "break"
+        },
+        {
+          "label": "5. DERS",
+          "start": "11:20",
+          "end": "12:00",
+          "type": "lesson"
+        },
+        {
+          "label": "5. TENEFFÜS",
+          "start": "12:00",
+          "end": "12:10",
+          "type": "break"
+        },
+        {
+          "label": "6. DERS",
+          "start": "12:10",
+          "end": "12:50",
+          "type": "lesson"
+        },
+        {
+          "label": "6. TENEFFÜS",
+          "start": "12:50",
+          "end": "13:00",
+          "type": "break"
+        },
+        {
+          "label": "7. DERS",
+          "start": "13:00",
+          "end": "13:40",
+          "type": "lesson"
+        }
+      ],
+      "3": [
+        {
+          "label": "1. DERS",
+          "start": "08:00",
+          "end": "08:40",
+          "type": "lesson"
+        },
+        {
+          "label": "1. TENEFFÜS",
+          "start": "08:40",
+          "end": "08:50",
+          "type": "break"
+        },
+        {
+          "label": "2. DERS",
+          "start": "08:50",
+          "end": "09:30",
+          "type": "lesson"
+        },
+        {
+          "label": "2. TENEFFÜS",
+          "start": "09:30",
+          "end": "09:40",
+          "type": "break"
+        },
+        {
+          "label": "3. DERS",
+          "start": "09:40",
+          "end": "10:20",
+          "type": "lesson"
+        },
+        {
+          "label": "3. TENEFFÜS",
+          "start": "10:20",
+          "end": "10:30",
+          "type": "break"
+        },
+        {
+          "label": "4. DERS",
+          "start": "10:30",
+          "end": "11:10",
+          "type": "lesson"
+        },
+        {
+          "label": "4. TENEFFÜS",
+          "start": "11:10",
+          "end": "11:20",
+          "type": "break"
+        },
+        {
+          "label": "5. DERS",
+          "start": "11:20",
+          "end": "12:00",
+          "type": "lesson"
+        },
+        {
+          "label": "5. TENEFFÜS",
+          "start": "12:00",
+          "end": "12:10",
+          "type": "break"
+        },
+        {
+          "label": "6. DERS",
+          "start": "12:10",
+          "end": "12:50",
+          "type": "lesson"
+        },
+        {
+          "label": "6. TENEFFÜS",
+          "start": "12:50",
+          "end": "13:00",
+          "type": "break"
+        },
+        {
+          "label": "7. DERS",
+          "start": "13:00",
+          "end": "13:40",
+          "type": "lesson"
+        }
+      ],
+      "4": [
+        {
+          "label": "1. DERS",
+          "start": "08:00",
+          "end": "08:40",
+          "type": "lesson"
+        },
+        {
+          "label": "1. TENEFFÜS",
+          "start": "08:40",
+          "end": "08:50",
+          "type": "break"
+        },
+        {
+          "label": "2. DERS",
+          "start": "08:50",
+          "end": "09:30",
+          "type": "lesson"
+        },
+        {
+          "label": "2. TENEFFÜS",
+          "start": "09:30",
+          "end": "09:40",
+          "type": "break"
+        },
+        {
+          "label": "3. DERS",
+          "start": "09:40",
+          "end": "10:20",
+          "type": "lesson"
+        },
+        {
+          "label": "3. TENEFFÜS",
+          "start": "10:20",
+          "end": "10:30",
+          "type": "break"
+        },
+        {
+          "label": "4. DERS",
+          "start": "10:30",
+          "end": "11:10",
+          "type": "lesson"
+        },
+        {
+          "label": "4. TENEFFÜS",
+          "start": "11:10",
+          "end": "11:20",
+          "type": "break"
+        },
+        {
+          "label": "5. DERS",
+          "start": "11:20",
+          "end": "12:00",
+          "type": "lesson"
+        },
+        {
+          "label": "5. TENEFFÜS",
+          "start": "12:00",
+          "end": "12:10",
+          "type": "break"
+        },
+        {
+          "label": "6. DERS",
+          "start": "12:10",
+          "end": "12:50",
+          "type": "lesson"
+        },
+        {
+          "label": "6. TENEFFÜS",
+          "start": "12:50",
+          "end": "13:00",
+          "type": "break"
+        },
+        {
+          "label": "7. DERS",
+          "start": "13:00",
+          "end": "13:40",
+          "type": "lesson"
+        }
+      ],
+      "5": [
+        {
+          "label": "1. DERS",
+          "start": "08:00",
+          "end": "08:40",
+          "type": "lesson"
+        },
+        {
+          "label": "1. TENEFFÜS",
+          "start": "08:40",
+          "end": "08:50",
+          "type": "break"
+        },
+        {
+          "label": "2. DERS",
+          "start": "08:50",
+          "end": "09:30",
+          "type": "lesson"
+        },
+        {
+          "label": "2. TENEFFÜS",
+          "start": "09:30",
+          "end": "09:40",
+          "type": "break"
+        },
+        {
+          "label": "3. DERS",
+          "start": "09:40",
+          "end": "10:20",
+          "type": "lesson"
+        },
+        {
+          "label": "3. TENEFFÜS",
+          "start": "10:20",
+          "end": "10:30",
+          "type": "break"
+        },
+        {
+          "label": "4. DERS",
+          "start": "10:30",
+          "end": "11:10",
+          "type": "lesson"
+        },
+        {
+          "label": "4. TENEFFÜS",
+          "start": "11:10",
+          "end": "11:20",
+          "type": "break"
+        },
+        {
+          "label": "5. DERS",
+          "start": "11:20",
+          "end": "12:00",
+          "type": "lesson"
+        },
+        {
+          "label": "5. TENEFFÜS",
+          "start": "12:00",
+          "end": "12:10",
+          "type": "break"
+        },
+        {
+          "label": "6. DERS",
+          "start": "12:10",
+          "end": "12:50",
+          "type": "lesson"
+        },
+        {
+          "label": "6. TENEFFÜS",
+          "start": "12:50",
+          "end": "13:00",
+          "type": "break"
+        },
+        {
+          "label": "7. DERS",
+          "start": "13:00",
+          "end": "13:40",
+          "type": "lesson"
+        },
+        {
+          "label": "7. TENEFFÜS",
+          "start": "13:40",
+          "end": "13:50",
+          "type": "break"
+        },
+        {
+          "label": "8. DERS",
+          "start": "13:50",
+          "end": "14:30",
+          "type": "lesson"
+        }
+      ]
+    }
+  },
+  "news": {
+    "url": "https://tahirkayaiho.meb.k12.tr/",
+    "active": true,
+    "count": 8,
+    "intervalMin": 30,
+    "showText": true,
+    "showImage": true,
+    "prefs": {
+      "hidden": {},
+      "order": [
+        "https://tahirkayaiho.meb.k12.tr/icerikler/t%C3%BCbitak-4006-bilim-fuar%C4%B1_16468619.html",
+        "https://tahirkayaiho.meb.k12.tr/icerikler/avrupada-dijital-%C3%A7a%C4%9F%C4%B1n-sosyal-giri%C5%9Fimcileri_16468601.html",
+        "https://tahirkayaiho.meb.k12.tr/icerikler/kelam-%C4%B1-tahir_16468368.html",
+        "https://tahirkayaiho.meb.k12.tr/icerikler/kelam-%C4%B1-tahir_16468311.html",
+        "https://tahirkayaiho.meb.k12.tr/icerikler/18-mart-%C5%9Fehitleri-anma-g%C3%BCn%C3%BC-ve-%C3%A7anakkale-zaferi_16160513.html",
+        "https://tahirkayaiho.meb.k12.tr/icerikler/okul-aile-birli%C4%9Fi-genel-kurul-toplantisi_17746305.html",
+        "https://tahirkayaiho.meb.k12.tr/icerikler/dyk_16106101.html"
+      ],
+      "deleted": {}
+    },
+    "items": [
+      {
+        "title": "Tübitak 4006 Bilim Fuarı",
+        "date": "",
+        "summary": "",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/t%C3%BCbitak-4006-bilim-fuar%C4%B1_16468619.html",
+        "image": "/uploads/news-abc36595e0242262.jpg",
+        "addedAt": "2026-11-18T10:23:49.583Z",
+        "hidden": false
+      },
+      {
+        "title": "Avrupa'da Dijital Çağın Sosyal Girişimcileri",
+        "date": "",
+        "summary": "",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/avrupada-dijital-%C3%A7a%C4%9F%C4%B1n-sosyal-giri%C5%9Fimcileri_16468601.html",
+        "image": "/uploads/news-85f57657d745adbd.jpg",
+        "addedAt": "2026-11-18T10:23:49.665Z",
+        "hidden": false
+      },
+      {
+        "title": "Kelam-ı Tahir",
+        "date": "",
+        "summary": "",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/kelam-%C4%B1-tahir_16468368.html",
+        "image": "/uploads/news-67374e3ce3aa4e94.jpg",
+        "addedAt": "2026-11-18T10:23:49.706Z",
+        "hidden": false
+      },
+      {
+        "title": "Kelam-ı Tahir",
+        "date": "",
+        "summary": "",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/kelam-%C4%B1-tahir_16468311.html",
+        "image": "/uploads/news-0eedd8f56a591a77.jpg",
+        "addedAt": "2026-11-18T10:23:49.767Z",
+        "hidden": false
+      },
+      {
+        "title": "18 Mart Şehitleri Anma Günü ve Çanakkale Zaferi",
+        "date": "2025-07-08",
+        "summary": "Bağlantılar Okuldan Randevu Al Etkinlikler Okul Kıyafetleri MEB Bilişim Sistemleri Giriş Ekranı e-Okul Veli Bilgilendirme Sistemi e-Devlet Kapısı >> www.turkiye.gov.tr 444 0 MEB Milli Eğitim Bakanlığı İstatistiki Bilgile",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/18-mart-%C5%9Fehitleri-anma-g%C3%BCn%C3%BC-ve-%C3%A7anakkale-zaferi_16160513.html",
+        "image": "/uploads/news-bc61f67894ebb3db.jpg",
+        "addedAt": "2026-11-18T10:23:49.818Z",
+        "hidden": false
+      },
+      {
+        "title": "OKUL AİLE BİRLİĞİ GENEL KURUL TOPLANTISI",
+        "date": "2026-10-12",
+        "summary": "",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/okul-aile-birli%C4%9Fi-genel-kurul-toplantisi_17746305.html",
+        "image": "/uploads/news-e65d82a48dfd6945.jpg",
+        "addedAt": "2026-11-18T10:23:49.874Z",
+        "hidden": false
+      },
+      {
+        "title": "DYK",
+        "date": "2025-03-18",
+        "summary": "Sayılarla Kurumumuz Kurumumuz hakkında detaylı bilgi almak için tıklayınız Derslik Sayısı 1 Öğretmen Sayısı 26 Öğrenci Sayısı 278 İletişim Adres: Fevzi Çakmak Mah. Gaye Sok. No17 Pendik / İstanbul Telefon 02163962030 e-P",
+        "link": "https://tahirkayaiho.meb.k12.tr/icerikler/dyk_16106101.html",
+        "image": "/uploads/news-6323da3f80d08aa7.jpg",
+        "addedAt": "2026-11-18T10:23:49.916Z",
+        "hidden": false
+      }
+    ],
+    "fetchedAt": "2026-11-25T09:13:50.542Z",
+    "error": null,
+    "checkedAt": "2026-11-25T09:13:50.531Z",
+    "etag": "",
+    "lastModified": "",
+    "lastNewAt": "2026-11-18T10:23:49.916Z"
+  },
+  "lastPing": {
+    "at": "2026-11-25T07:11:46.345Z",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36",
+    "ip": "127.0.0.1"
+  }
+}
